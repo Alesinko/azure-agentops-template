@@ -1,1 +1,44 @@
+name: ci
 
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test-evidence:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      checks: write
+      id-token: write
+      # no secrets needed
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Unit tests (pytest)
+        run: pytest
+
+      - name: Golden-set evals (gate)
+        run: python scripts/run_evals.py
+
+      - name: Generate evidence bundle
+        run: |
+          python scripts/generate_evidence.py
+          zip -r evidence.zip governance
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence
+          path: evidence.zip
