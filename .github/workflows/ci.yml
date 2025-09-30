@@ -20,8 +20,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Unit + Golden-set tests (acts like Prompt Flow eval)
-        run: pytest
+      - name: Unit + Golden-set tests (Prompt Flow mimic)
+        run: PYTHONPATH=. pytest
+
 
       - name: Generate evidence bundle
         run: |
