@@ -1,4 +1,4 @@
-import csv, json, time
+import csv, json, time, os
 from fastapi.testclient import TestClient
 from app.main import app
 
@@ -17,7 +17,18 @@ def test_golden_set(tmp_path):
             q = row["question"].strip().strip('"')
             expect = row["expected_contains"]
             r = client.post("/ask", json={"question": q})
-            ok = (r.status_code == 200) and (expect in r.text)
+
+            ok = False
+            if r.status_code == 200:
+                # parse JSON for more robust checks
+                j = r.json()
+                # if we're checking "citations", verify the key exists (and optionally non-empty)
+                if expect == "citations":
+                    ok = ("citations" in j)  # or: ("citations" in j and len(j["citations"]) >= 1)
+                else:
+                    # fall back to substring match on text for other cases
+                    ok = (expect in r.text)
+
             passed += int(ok)
             rows.append({
                 "id": i,
@@ -27,23 +38,16 @@ def test_golden_set(tmp_path):
                 "ok": ok
             })
 
-    end = time.time()
     report = {
         "started_at": start,
-        "ended_at": end,
-        "duration_sec": round(end - start, 3),
+        "ended_at": time.time(),
+        "duration_sec": round(time.time() - start, 3),
         "passed": passed,
         "total": len(rows),
         "cases": rows
     }
-    tmp = tmp_path / "evals.json"
-    tmp.write_text(json.dumps(report, indent=2), encoding="utf-8")
-
-    # save to repo-local path for evidence packaging
-    import os
     os.makedirs("reports", exist_ok=True)
     with open("reports/evals.json", "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
 
-    # Gate: require all cases to pass
     assert passed == len(rows), f"Golden-set failed: {passed}/{len(rows)}"
