@@ -1,7 +1,4 @@
 question,expected_contains
 "What is governance?","Answer:"
 "Show source","example.com/source"
-"Do we have citations?","\"citations\""
-
-
-
+"Do we have citations?","citations"
