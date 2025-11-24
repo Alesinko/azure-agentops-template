@@ -29,8 +29,8 @@ PII_PATTERNS = [
 PII_RE = re.compile("|".join(PII_PATTERNS), re.IGNORECASE)
 
 REFUSAL_TEXT = (
-    "I can’t share personal or sensitive information. "
-    "I cannot share that data due to our policy."
+    "I cannot share personal or sensitive information. "
+    "It would violate our policy and data protection rules."
 )
 
 
