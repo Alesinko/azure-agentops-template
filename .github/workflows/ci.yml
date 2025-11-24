@@ -32,6 +32,19 @@ jobs:
       - name: Unit + Golden-set tests (Prompt Flow mimic)
         run: PYTHONPATH=. pytest
 
+      - name: Set up Node (for Mermaid CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Render Mermaid lineage to PNG
+        run: |
+          mkdir -p governance/lineage
+          npx -y @mermaid-js/mermaid-cli@10.9.1 \
+            -i docs/lineage.mmd \
+            -o governance/lineage/LINEAGE.png \
+            -b transparent
+
 
       - name: Generate evidence bundle
         run: |
