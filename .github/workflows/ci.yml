@@ -37,13 +37,14 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Render Mermaid lineage to PNG
+      - name: Render lineage diagram (Mermaid → PNG)
         run: |
           mkdir -p governance/lineage
-          npx -y @mermaid-js/mermaid-cli@10.9.1 \
-            -i docs/lineage.mmd \
-            -o governance/lineage/LINEAGE.png \
-            -b transparent
+          npx -y @mermaid-js/mermaid-cli \
+            -p puppeteer-config.json \
+            -i governance/lineage/lineage.mmd \
+            -o governance/lineage/lineage.png
+
 
 
       - name: Generate evidence bundle
