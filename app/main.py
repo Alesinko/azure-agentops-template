@@ -49,13 +49,22 @@ def ask(payload: Ask):
     context = "Context: company policy; payment terms net 60; see demo source."
     prompt = f"{context}\n\nQ: {q}\nA:"
     start = time.time()
+
+    
     completion = llm_generate(prompt, max_new_tokens=40, seed=123)
     latency_ms = int((time.time() - start) * 1000)
 
+    # Normalize the answer so it ALWAYS starts with "Answer:"
+    if not completion:
+        answer = "Answer: (no output)"
+    else:
+        txt = str(completion)
+        if not txt.lstrip().lower().startswith("answer:"):
+            answer = f"Answer: {txt}"
+        else:
+            answer = txt
+
     # fake a single citation
     citations = ["https://example.com/source"]
-    answer = completion if completion else "Answer: (no output)"
-    # include a SOURCE tag for demos if you prefer
-    # answer += " [SOURCE: demo_corpus]"
 
     return {"answer": answer, "citations": citations, "latency_ms": latency_ms}
