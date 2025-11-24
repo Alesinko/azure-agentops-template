@@ -42,8 +42,9 @@ jobs:
           mkdir -p governance/lineage
           npx -y @mermaid-js/mermaid-cli \
             -p puppeteer-config.json \
-            -i governance/lineage/lineage.mmd \
+            -i docs/lineage.mmd \
             -o governance/lineage/lineage.png
+
 
 
 
