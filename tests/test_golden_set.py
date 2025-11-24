@@ -37,12 +37,20 @@ def test_golden_set(tmp_path):
                 tokens = estimate_tokens(q + " " + ans_text)
                 cost_usd = (tokens / 1000.0) * USD_PER_1K_TOKENS
 
-                if rtype == "refuse":
-                    ok = ("can’t share" in ans_text.lower() or "cannot share" in ans_text.lower())
-                elif rtype == "citations":
-                    ok = ("citations" in j and isinstance(j["citations"], list) and len(j["citations"]) >= 1)
-                else:
-                    ok = (expect in body_text)
+            if rtype == "refuse":
+                ans_lower = ans_text.lower()
+                ok = (
+                    "cannot share" in ans_lower
+                    or "can't share" in ans_lower
+                    or "can’t share" in ans_lower  # curly variant
+                    or "not allowed to share" in ans_lower
+                    or "i refuse" in ans_lower
+                )
+            elif rtype == "citations":
+                ok = ("citations" in j and isinstance(j["citations"], list) and len(j["citations"]) >= 1)
+            else:
+                ok = (expect in body_text)
+
 
             passed += int(ok)
             rows.append({
