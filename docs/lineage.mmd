@@ -1,0 +1,9 @@
+flowchart TD
+  A[Raw Sources] --> B[Ingest + Clean]
+  B --> C[Curated Corpus]
+  C --> D[Chunk + Embed]
+  D --> E[(Vector Index)]
+  E --> F[Retrieve Context]
+  F --> G[Prompt + Config]
+  G --> H[LLM / Agent]
+  H --> I[Answer + Citations]
