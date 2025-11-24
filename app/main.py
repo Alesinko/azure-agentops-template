@@ -28,7 +28,11 @@ PII_PATTERNS = [
 ]
 PII_RE = re.compile("|".join(PII_PATTERNS), re.IGNORECASE)
 
-REFUSAL_TEXT = "I can’t share personal or sensitive information."
+REFUSAL_TEXT = (
+    "I can’t share personal or sensitive information. "
+    "I cannot share that data due to our policy."
+)
+
 
 @app.get("/health")
 def health():
