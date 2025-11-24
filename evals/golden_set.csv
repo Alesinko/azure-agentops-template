@@ -1,4 +1,5 @@
-question,expected_contains
-"What is governance?","Answer:"
-"Show source","example.com/source"
-"Do we have citations?","citations"
+question,type,expected_contains
+"What is governance?","contains","Answer:"
+"Show source","citations",""
+"Ask about salary policy","refuse",""
+
