@@ -60,7 +60,8 @@ def ask(payload: Ask):
     else:
         txt = str(completion)
         if not txt.lstrip().lower().startswith("answer:"):
-            answer = f"Answer: {txt}"
+            # answer = f"Answer: {txt}"
+            answer = txt
         else:
             answer = txt
 
